@@ -1,0 +1,200 @@
+select * from employees;
+select * from products;
+select ProductID,ProductName,CategoryID from products;
+select * from products where CategoryID = 2; 
+select * from products where CategoryID = 2 and CategoryID = 4; 
+select * from products where CategoryID = 2 or CategoryID = 4; 
+select ProductID,ProductName,UnitPrice from products where UnitPrice>100; 
+select * from products where ProductName="tofu";
+select * from productS where CategoryID=2 or CategoryID=3 or CategoryID=4;
+select * from products where SupplierID in (3,5,8);
+select * from products where UnitPrice between 30 and 60;
+select * from products where UnitsInStock between 0 and 10;
+select * from products where ProductName like "c%";
+select * from products ORDER BY ProductName asc; 
+select * from products ORDER BY ProductID desc; 
+select * from customers;
+select * from customers order by CompanyName asc; 
+
+
+
+
+-- 1
+select ord.OrderID, emp.FirstName, emp.LastName FROM Orders AS ord Join employees AS emp 
+ON ord.EmployeeID=emp.EmployeeID where emp.FirstName = "Robert" AND emp.LastName= "King";
+
+-- 2 
+select emp.EmployeeID, CONCAT(emp.FirstName, " ", emp.LastName) "Nombre", ord.OrderID FROM employees as emp join orders as ord on (ord.EmployeeID=emp.EmployeeID) 
+where (emp.FirstName= "Robert" AND emp.LastName= "King") 
+OR (emp.FirstName= "Nancy" AND emp.LastName= "Davolio")
+OR (emp.FirstName= "Andrew" AND emp.LastName= "Fuller"); 
+
+-- 3
+SELECT * FROM orders AS ord JOIN customers AS cus ON (ord.CustomerID = cus.CustomerID) WHERE cus.CompanyName = "Que del?cia";
+
+-- 4
+select ord.OrderID, pro.ProductName, pro.UnitPrice, ord.Quantity from products 
+AS pro join orderdetails as ord on pro.ProductID=ord.ProductID where OrderID= "10257";
+
+-- 5
+select ord.OrderID, pro.ProductName, pro.UnitPrice, ord.Quantity, orde.OrderDate
+from products AS pro 
+join orderdetails as ord 
+join orders as orde
+on pro.ProductID=ord.ProductID 
+where orde.OrderDate >= 1997;
+
+-- 6
+select ord.OrderID, ord.OrderDate, sum(ords.Quantity)
+from orders as ord
+join orderdetails as ords
+on (ord.OrderID = ords.OrderID)
+GROUP BY ords.OrderID;
+
+-- 7 
+select cat.CategoryName, prod.ProductName, prod.UnitPrice, prod.UnitsInStock
+from categories as cat
+join products as prod
+on (cat.CategoryID = prod.CategoryID);
+
+
+-- 8 
+select cat.CategoryName, ord.Quantity
+from categories as cat
+join products as prod 
+ON cat.CategoryID = prod.CategoryID
+join orderdetails as ord
+on (prod.ProductID = ord.ProductID)
+where cat.CategoryID in (3,5,8)
+group by cat.CategoryName;
+
+-- 9
+select cat.CategoryName, prod.UnitsInStock
+from categories as cat 
+join products as prod
+on (cat.CategoryID = prod.CategoryID) 
+group by cat.CategoryName;
+
+-- 1o 
+select ord.ProductID, ord.OrderID, supp.SupplierID, supp.CompanyName 
+from orderdetails as ord
+join products as prod
+on (ord.ProductID = prod.ProductID) 
+join suppliers as supp
+on (prod.SupplierID = supp.SupplierID);
+
+-- 11 
+select ord. OrderID, emp.EmployeeID, emp.FirstName
+from orders as ord
+join employees as emp
+on (ord.EmployeeID = emp.EmployeeID);
+
+-- 12
+select prod.ProductID, cat.CategoryID, cat.CategoryName
+from products as prod
+join categories as cat 
+on (prod.CategoryID = cat.CategoryID);
+
+-- 13 
+select emp.EmployeeID, emp.FirstName, emp.LastName, empt.TerritoryID 
+from employees as emp
+join employeeterritories as empt
+on (emp.EmployeeID = empt.EmployeeID);
+
+-- 14 
+select cust.CustomerID, cust.ContactName, ord.OrderID
+from customers as cust
+join orders as ord
+on (ord.CustomerID = cust.CustomerID);
+
+-- 15 
+select cust.CustomerID, cust.ContactName,  COUNT(*)
+from customers as cust
+join orders as ord
+on (ord.CustomerID = cust.CustomerID)
+group by cust.CustomerID;
+
+-- 16 
+select ordd.*, cat.CategoryName
+from orderdetails as ordd
+join products as prod 
+on (ordd.ProductID = prod.ProductID)
+join categories as cat 
+on (prod.CategoryID = cat.CategoryID);
+
+-- 17
+select cust.Address, ord.OrderID, emp.Address
+from customers as cust
+join orders as ord 
+on (cust.CustomerID = ord.CustomerID) 
+join employees as emp 
+on (ord.EmployeeID = emp.EmployeeID);
+
+-- 18 
+select prod.ProductID, prod.ProductName,sup.Address
+from products as prod
+join suppliers as sup 
+on (prod.SupplierID = sup.SupplierID);
+
+-- 19 
+select cust.CompanyName, cust.CustomerID, ord.OrderDate, ordt.UnitPrice, prod.ProductName
+from customers as cust
+join orders as ord
+on (cust.CustomerID = ord.CustomerID)
+join orderdetails as ordt
+on (ord.OrderID = ordt.OrderID)
+join products as prod
+on (ordt.ProductID = prod.ProductID);
+
+-- 20
+select prod.ProductName, prod.UnitPrice, prod.UnitsInStock, cat.CategoryName
+from products as prod
+join categories as cat
+on (prod.CategoryID = cat.CategoryID);
+
+-- 21 
+select prod.ProductName, prod.UnitPrice, prod.SupplierID, sup.CompanyName 
+from products as prod
+join suppliers as sup
+on (prod.SupplierID = sup.SupplierID);
+
+-- 22
+select ord.OrderID, ord.OrderDate, ordd.ProductID, ordd.UnitPrice, emp.EmployeeID, emp.FirstName,emp.LastName
+from orders as ord
+join orderdetails as ordd
+on (ord.OrderID = ordd.OrderID) 
+join employees as emp 
+on (ord.EmployeeID = emp.EmployeeID);
+
+-- 23 
+select cat.CategoryName, sum(prod.UnitsInStock)
+from products as prod
+join categories as cat 
+on (prod.CategoryID = cat.CategoryID)
+group by cat.CategoryName;
+
+-- 24 
+select ord.OrderID, cus.ContactName, sup.ContactName, emp.FirstName, emp.LastName, pro.ProductName
+from orders as ord 
+join employees as emp 
+on (ord.EmployeeID = emp.EmployeeID)
+join orderdetails as ordd 
+on (ord.OrderID = ordd.OrderID)
+join products as pro 
+on (ordd.ProductID = pro.ProductID)
+join suppliers as sup 
+on (pro.SupplierID = sup.SupplierID)
+join customers as cus 
+on (ord.CustomerID = cus.CustomerID)
+where ord.OrderID= "10794";
+
+
+SELECT count(OrderID)"NUM_Pedidos",EmployeeID "ID_Empleado" from Orders group by EmployeesID;  
+select OrderID, Quantity from orderdetails group by OrderID;
+select OrderID, Quantity from orderdetails WHERE Quantity<50 group by OrderID;
+SELECT OrderID,SUM(Quantity) FROM orderdetails GROUP BY OrderID HAVING Sum(Quantity)<50;
+SELECT Title, Country, count(Title) FROM employees WHERE (Title="Sales Representative") GROUP BY Country;SELECT Title, Country, count(Title) FROM employees WHERE (Title="Sales Representative") GROUP BY Country;
+select OrderID, Quantity from orderdetails group by OrderID;
+select OrderID, Quantity from orderdetails WHERE Quantity<50 group by OrderID;
+
+
