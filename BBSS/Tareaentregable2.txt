@@ -1,3 +1,0 @@
-SELECT count(*) FROM northwind.products where UnitsInStock = 0 ;
-select sum(UnitsInStock) from products where UnitsOnOrder !=0;
-select count(*) from employees where FirstName like "a%"; 
